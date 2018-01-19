@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+// MODEL
+const User = require('..models/users.js')
+
 // get route to show all users
 // can see basic info like name and location
 // should display first few books in one of their shelves -- need to decide which shelf
@@ -55,5 +58,5 @@ router.delete('/:id', (req, res) => {
 	res.send('delete route for user')
 })
 
-
+// EXPORT
 module.exports = router;
