@@ -20,6 +20,10 @@ app.use(session({
 app.use(express.static('public'));
 
 
+// CONTROLLERS
+const UserController = require('./controllers/userController');
+app.use('/user', UserController);
+
 
 // 404
 app.get('*', () => {
