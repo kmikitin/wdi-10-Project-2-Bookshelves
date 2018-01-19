@@ -25,6 +25,12 @@ const UserController = require('./controllers/userController');
 app.use('/user', UserController);
 
 
+// HOME
+app.get('/', (req, res) => {
+	res.render('home.ejs')
+})
+
+
 // 404
 app.get('*', () => {
 	res.status(404).send(404, 'page not found')
