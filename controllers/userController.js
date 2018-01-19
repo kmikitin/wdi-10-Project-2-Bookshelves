@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // MODEL
-const User = require('..models/users.js')
+const User = require('../models/users.js')
 
 // get route to show all users
 // can see basic info like name and location
