@@ -1,0 +1,31 @@
+{
+  "name": "wdi-10-project-2-bookshelves",
+  "version": "1.0.0",
+  "description": "## What is Bookshelves? Bookshelves allows readers to organize their current, future and past reads! They will also be able to create and manage their own bookclubs to connect and share new adventures on the page.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmikitin/wdi-10-Project-2-Bookshelves.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmikitin/wdi-10-Project-2-Bookshelves/issues"
+  },
+  "homepage": "https://github.com/kmikitin/wdi-10-Project-2-Bookshelves#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-sessions": "^1.0.6",
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.4.0",
+    "method-override": "^2.3.10",
+    "mongoose": "^5.0.0"
+  }
+}
