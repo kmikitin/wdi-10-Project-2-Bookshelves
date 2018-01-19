@@ -24,10 +24,13 @@ app.use(express.static('public'));
 const UserController = require('./controllers/userController');
 app.use('/user', UserController);
 
+const BookController = require('./controllers/bookController');
+app.use('/book', BookController);
+
 
 // HOME
 app.get('/', (req, res) => {
-	res.render('home.ejs')
+	res.render('./books/search.ejs')
 })
 
 
