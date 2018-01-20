@@ -6,7 +6,12 @@ const Book = require('../models/books.js')
 
 // serve the user the search page for books
 router.get('/', (req, res) => {
-	res.send('search.ejs')
+	res.render('books/search.ejs')
+})
+
+// show the user the result of their search
+router.get('/result', (req, res) => {
+	res.render('books/result.ejs')
 })
 
 
