@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 
 // 404
-app.get('*', () => {
+app.get('*', (req,res) => {
 	res.status(404).send(404, 'page not found')
 })
 

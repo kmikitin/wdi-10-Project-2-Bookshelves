@@ -14,6 +14,12 @@ router.get('/result', (req, res) => {
 	res.render('books/result.ejs')
 })
 
+// show the user information on the book they clicked on
+//<!-- THIS SHOULD BE CHANGED TO A VARIABLE ROUTE ONCE WE HAVE OAUTH WORKING -->
+router.get('/result/show', (req, res) => {
+	res.render('books/show.ejs')
+})
+
 
 // EXPORT
 module.exports = router;
