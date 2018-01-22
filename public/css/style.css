@@ -1,0 +1,16 @@
+#sidebar {
+    overflow-y: scroll;
+    max-height: 91.6vh;
+}
+
+#main-top {
+    max-height: 40vh;
+/*    min-height: 40vh;*/
+   overflow-y: hidden;
+}
+
+#main-bottom {
+    max-height: 45.1vh;
+/*    min-height: 40vh;*/
+   overflow-y: scroll;
+}
