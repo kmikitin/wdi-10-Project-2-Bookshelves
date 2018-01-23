@@ -34,7 +34,7 @@ let isAuthorized = false;
   }
 
   function initClient() {
-    // Retrieve the discovery document for version 3 of Google Drive API.
+    // Retrieve the discovery document for version 1 of Google Books API.
     // In practice, your app can retrieve one or more discovery documents.
     var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/books/v1/rest';
 
@@ -108,7 +108,7 @@ let isAuthorized = false;
       $('#auth-status').html('You are currently signed in and have granted ' +
           'access to this app.');
     } else {
-      $('#sign-in-or-out-button').html('Sign In/Authorize');
+      $('#sign-in-or-out-button').html('Sign in using Google');
       $('#revoke-access-button').css('display', 'none');
       $('#auth-status').html('You have not authorized this app or you are ' +
           'signed out.');

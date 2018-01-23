@@ -30,7 +30,7 @@ app.use('/book', BookController);
 
 // HOME
 app.get('/', (req, res) => {
-	res.render('users/login.ejs')
+	res.render('home.ejs')
 })
 
 

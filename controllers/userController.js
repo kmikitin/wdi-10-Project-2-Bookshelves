@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 // MODEL
 const User = require('../models/users.js')
@@ -14,25 +15,62 @@ router.get('/', (req, res) => {
 
 // serve user form to register
 router.get('/register', (req, res) => {
-	res.send('get route for registration')
+	res.render('users/register.ejs')
 });
 
 // create user in database take them to their profile page
 // encrypt password here
-router.post('/register', (req, res) => {
-	res.send('post route for registration')
+router.post('/', (req, res) => {
+	const password = req.body.password;
+	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
+	const userDbEntry = {
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		email: req.body.email,
+		location: req.body.location,
+		username: req.body.username,
+		password: passwordHash,
+		genres: [],
+		bookshelves: {},
+		bookclubs: {}
+	};
+
+	User.create(userDbEntry, (err, newUser) => {
+		console.log(newUser, 'this is the new user')
+		console.log(req.session, 'in the post route')
+		req.session.username = req.body.username;
+		req.session.logged = true;
+	})
+	res.send('you have successfully registered')
 })
+
 
 // serve user form to login
 router. get('/login', (req, res) => {
-	res.render('users/login.ejs')
+	res.render('users/login.ejs', { message: req.session.message })
 })
 
 // check user information in database, if successful send to profile page
 // if unsuccessful send invalid message to try again
 // limit tries?
 router.post('/login', (req, res) => {
-	res.send('post route for login')
+	User.findOne({username: req.body.username}, (err, foundUser) => {
+		if(foundUser) {
+			if (bcrypt.compareSync(req.body.password, foundUser.password)) {
+				req.session.username = req.body.username;
+				req.session.logged = true;
+				req.session.message = '';
+				res.redirect('/')
+			} else {
+				req.session.message = "Username or password incorrect";
+				res.redirect('/user/login');
+			}
+		} else {
+			req.session.message = "Username or password incorrect";
+			res.redirect('/user/login');
+		}
+	})
 })
 
 // show the user their profile page
