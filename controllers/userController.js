@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
 
 
 // serve user form to login
-router. get('/login', (req, res) => {
+router.get('/login', (req, res) => {
 	res.render('users/login.ejs', { message: req.session.message })
 })
 
@@ -73,6 +73,14 @@ router.post('/login', (req, res) => {
 			res.redirect('/user/login');
 		}
 	})
+})
+
+router.post('/bookshelf', (req, res) => {
+	console.log(typeof req.body, typeof req.body.Data,req.body.Data)
+	const data = JSON.Parse(req.body.Data);
+	console.log(data.Favorites)
+	// how can You identify who the user is? sesssssssss
+	res.send('completed')
 })
 
 // show the user their profile page
