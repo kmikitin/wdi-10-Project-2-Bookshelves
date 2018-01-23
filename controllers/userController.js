@@ -25,7 +25,7 @@ router.post('/register', (req, res) => {
 
 // serve user form to login
 router. get('/login', (req, res) => {
-	res.send('get route for login')
+	res.render('users/login.ejs')
 })
 
 // check user information in database, if successful send to profile page
