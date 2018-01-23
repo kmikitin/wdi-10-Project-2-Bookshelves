@@ -9,7 +9,7 @@ const User = require('../models/users.js')
 // can see basic info like name and location
 // should display first few books in one of their shelves -- need to decide which shelf
 router.get('/', (req, res) => {
-	res.send('this is where all users will be displayed')
+	res.render('users/profile.ejs')
 })
 
 
