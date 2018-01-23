@@ -1,122 +1,120 @@
 console.log('Linked')      
 
-// RUN EXPRESS SERVER TO DO THIS
-let GoogleAuth; //Google Auth obj
-let isAuthorized; // boolean variable to indicate if the user is already signed in
-let currentApiRequest; // object that stores data about the latest api request the user attempted
-let authorizeButton = document.getElementById('authorize-button');
-let signoutButton = document.getElementById('signout-button');
+let isAuthorized = false;
 
-
-
-$.ajax({
-	url:'https://www.googleapis.com/books/v1/mylibrary/bookshelves?key=AIzaSyDSltVcQfPnkSYy93x53V6H1XCd4ZPje7c',
-	type: 'GET',
-	dataType: 'JSON',
-	success: (data) => {
-		console.log(data, ' this is data')
-	}, 
-	error: (err) => {
-		console.log(err)
-	}
-})
-
-/**
- * Store the request details. Then check to determine whether the user
- * has authorized the application.
- *   - If the user has granted access, make the API request.
- *   - If the user has not granted access, initiate the sign-in flow.
- */
-const sendAuthorizedApiRequest = (requestDetails) => {
+  const sendAuthorizedApiRequest = (requestDetails) => {
   currentApiRequest = requestDetails;
+  console.log('is this called')
   if (isAuthorized) {
     // Make API request
+    console.log('is this magically called when authorized')
     // gapi.client.request(requestDetails)
+    const request = gapi.client.request({
+      'method': 'GET',
+      'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves',
+      'params': {'part': 'snippet', 'mine': 'true'}
+    })
 
+    console.log(request, ' this is request')
+    request.execute(function(response) {
+      console.log(response)
+    })
     // Reset currentApiRequest variable.
     currentApiRequest = {};
   } else {
     GoogleAuth.signIn();
   }
 }
-
-
-function setSigninStatus(isSignedIn) {
-    var user = GoogleAuth.currentUser.get();
-    var isAuthorized = user.hasGrantedScopes(SCOPE);
-    if (isAuthorized) {
-      	authorizeButton.style.display = 'none';
-    	signoutButton.style.display = 'block';
-    } else {
-      	authorizeButton.style.display = 'block';
-    	signoutButton.style.display = 'none';
-    }
+  var GoogleAuth;
+  var SCOPE = 'https://www.googleapis.com/auth/books';
+  function handleClientLoad() {
+    // Load the API's client and auth2 modules.
+    // Call the initClient function after the modules load.
+    gapi.load('client:auth2', initClient);
   }
 
+  function initClient() {
+    // Retrieve the discovery document for version 3 of Google Drive API.
+    // In practice, your app can retrieve one or more discovery documents.
+    var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/books/v1/rest';
 
-/**
- * Listener called when user completes auth flow. If the currentApiRequest variable is set, then the user was prompted to authorize the application before the request executed. In that case, proceed with that API request.
- */
-const updateSigninStatus = (isSignedIn) => {
-  if (isSignedIn) {
-    isAuthorized = true;
-    authorizeButton.style.display = 'none';
-    signoutButton.style.display = 'block';
-    if (currentApiRequest) {
-      sendAuthorizedApiRequest(currentApiRequest);
-    }
-  } else {
-    	isAuthorized = false;
-    	authorizeButton.style.display = 'block';
-    	signoutButton.style.display = 'none';
-  }
-}
-
-// sign in/sign out
-const handleAuthClick = () => {
-        if (GoogleAuth.isSignedIn.get()) {
-      		// User is authorized and has clicked 'Sign out' button.
-      		GoogleAuth.signOut();
-    	} else {
-      		// User is not signed in. Start Google auth flow.
-      		GoogleAuth.signIn();
-    }
-}
-
-const revokeAccess = () => {
-        GoogleAuth.disconnect();
-      }
-
-// this will create the consent screen for user
-// auth2 object checks and monitors user's auth status
-const initClient = () => {
-  gapi.client.init({
-      'apiKey': 'AIzaSyDSltVcQfPnkSYy93x53V6H1XCd4ZPje7c',
-      'clientId': '690685317347-j08qcmtfihjgi9r2qr352sm4fpjd0d55.apps.googleusercontent.com',
-      'scope': 'https://www.googleapis.com/auth/books',
-      'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/book/v1/rest'] //constructs methods for interacting with the api
-  }).then((something) => {
-  	console.log(something, ' this is something')
-  	  // Initialize auth2 obj, 
+    // Initialize the gapi.client object, which app uses to make API requests.
+    // Get API key and client ID from API Console.
+    // 'scope' field specifies space-delimited list of access scopes.
+    gapi.client.init({
+        'apiKey': 'AIzaSyDSltVcQfPnkSYy93x53V6H1XCd4ZPje7c',
+        'discoveryDocs': [discoveryUrl],
+        'clientId': '690685317347-j08qcmtfihjgi9r2qr352sm4fpjd0d55.apps.googleusercontent.com',
+        'scope': SCOPE
+    }).then(function () {
       GoogleAuth = gapi.auth2.getAuthInstance();
 
-      // listen for sign-in state changes.
+      // Listen for sign-in state changes.
       GoogleAuth.isSignedIn.listen(updateSigninStatus);
 
       // Handle initial sign-in state. (Determine if user is already signed in.)
-       updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      var user = GoogleAuth.currentUser.get();
+      console.log(user, ' this is user, is my toke in here')
+      // if(user != null ){
+      //         $.ajax({
+      //   url:'https://www.googleapis.com/books/v1/mylibrary/bookshelves?key=' + user.Zi.access_token,
+      //   type: 'GET',
+      //   dataType: 'JSON',
+      //   success: (data) => {
+      //     console.log(data, ' this is data')
+      //   }, 
+      //   error: (err) => {
+      //     console.log(err)
+      //   }
+      // })
+      // }
+
+      setSigninStatus();
 
       // Call handleAuthClick function when user clicks on
       //      "Sign In/Authorize" button.
-      authorizeButton.addEventListener('click', handleAuthClick); 
-      signoutButton.on('click', revokeAccess);
+      $('#sign-in-or-out-button').click(function() {
+        handleAuthClick();
+      }); 
+      $('#revoke-access-button').click(function() {
+        revokeAccess();
+      }); 
+    });
+  }
 
-  });
-};
+  function handleAuthClick() {
+    if (GoogleAuth.isSignedIn.get()) {
+      // User is authorized and has clicked 'Sign out' button.
+      GoogleAuth.signOut();
+    } else {
+      // User is not signed in. Start Google auth flow.
+      GoogleAuth.signIn();
+    }
+  }
 
-const handleClientLoad = () => {
-        // Load the API client and auth2 library
-        gapi.load('client:auth2', initClient);
-      }
+  function revokeAccess() {
+    GoogleAuth.disconnect();
+  }
 
+  function setSigninStatus(isSignedIn) {
+    var user = GoogleAuth.currentUser.get();
+    isAuthorized = user.hasGrantedScopes(SCOPE);
+    console.log(isAuthorized, ' this is isAuthorized')
+    if (isAuthorized) {
+      console.log('inside of if is called')
+      sendAuthorizedApiRequest(isAuthorized)
+      $('#sign-in-or-out-button').html('Sign out');
+      $('#revoke-access-button').css('display', 'inline-block');
+      $('#auth-status').html('You are currently signed in and have granted ' +
+          'access to this app.');
+    } else {
+      $('#sign-in-or-out-button').html('Sign In/Authorize');
+      $('#revoke-access-button').css('display', 'none');
+      $('#auth-status').html('You have not authorized this app or you are ' +
+          'signed out.');
+    }
+  }
 
+  function updateSigninStatus(isSignedIn) {
+    setSigninStatus();
+  }
