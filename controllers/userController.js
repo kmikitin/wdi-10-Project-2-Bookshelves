@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
 		req.session.username = req.body.username;
 		req.session.logged = true;
 	})
-	res.send('you have successfully registered')
+	res.redirect('/user/' + newUser._id)
 })
 
 
@@ -61,7 +61,9 @@ router.post('/login', (req, res) => {
 				req.session.username = req.body.username;
 				req.session.logged = true;
 				req.session.message = '';
-				res.redirect('/')
+				console.log(req.body)
+				console.log(foundUser._id)
+				res.redirect('/user/' + foundUser._id)
 			} else {
 				req.session.message = "Username or password incorrect";
 				res.redirect('/user/login');
@@ -77,7 +79,11 @@ router.post('/login', (req, res) => {
 // account for if they're logged in (will see edit/remove)
 // if not their page should show general info without edit/remove option
 router.get('/:id', (req, res) => {
-	res.send('get route for individual user show page')
+	User.findById(req.params.id, (err, foundUser) => {
+		if (err) console.log(err)
+			console.log(foundUser)
+			res.render('users/profile.ejs', { user: foundUser })
+	})
 })
 
 // serve user form to edit their profile
