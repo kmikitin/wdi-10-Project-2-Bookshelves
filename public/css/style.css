@@ -14,3 +14,12 @@
 /*    min-height: 40vh;*/
    overflow-y: scroll;
 }
+
+/*
+
+THIS IS FOR THE REGISTRATION PAGE, IT'S NOT NEEDED AT THE MOMENT, HOWEVER, IF THE FORMATING IS EVER BROKEN, TRY UNCOMMENTING THESE.
+#register {
+    overflow-y: scroll;
+    max-height: 90.7vh;
+}
+*/
