@@ -11,10 +11,10 @@
 </head>
 
 <body>
-   
-<!-- SPACES THE TOP EDGE FROM CONTENT  -->
+
+    <!-- SPACES THE TOP EDGE FROM CONTENT  -->
     <div class="spacer"></div>
-    
+
     <header>
         <!--space for a comment-->
         <div class="text-right">
@@ -27,25 +27,33 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
 
-                        <form class="px-4 py-3">
+                        <form class="px-4 py-3" action="/user/login" method="post">
                             <div class="form-group">
                                 <label for="DropdownFormUsername">Username</label>
-                                <input type="name" class="form-control" id="DropdownFormUsername" placeholder="Username">
+                                <input type="text" name="name" class="form-control" id="DropdownFormUsername" placeholder="Username">
                             </div>
                             <div class="form-group">
                                 <label for="DropdownFormPassword">Password</label>
-                                <input type="password" class="form-control" id="DropdownFormPassword" placeholder="Password">
+                                <input type="password" name="password" class="form-control" id="DropdownFormPassword" placeholder="Password">
                             </div>
-                           
-<!-- THIS IS JSUT AN OPTION TO OPT IN TO HAVING A COOKIE -->
+
+                            <!-- THIS IS JSUT AN OPTION TO OPT IN TO HAVING A COOKIE (REMEMBER ME) -->
+                            <!--
                                  <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="dropdownCheck">
                                 <label class="form-check-label" for="dropdownCheck">Remember me</label>
                             </div>
-                            
-<!-- THIS IS GOING TO HAVE TO BE CHANGED ONCE THE ROUTES HAVE BEEN SET -->
-                            <button type="submit" class="btn btn-primary" href="/user/login">Sign in</button>
+-->
+
+                            <!-- THIS IS GOING TO HAVE TO BE CHANGED ONCE THE ROUTES HAVE BEEN SET -->
+
+                            <button type="submit" class="btn btn-primary">Sign in</button>
                         </form>
+
+                        <button type="submit" class="btn btn-primary" id="sign-in-or-out-button">Sign in/Authorize</button>
+
+                        <button type="submit" class="btn btn-primary" id="revoke-access-button" style="display: none">Revoke access</button>
+                    <div id="auth-status" style="display: inline"></div>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/user/register">Don't have an account? Sign up</a>
 
@@ -83,12 +91,23 @@
     <footer>
         <div class="bottom mb-md-5 text-center">Footer</div>
     </footer>
-
+<!--BOOTSTRAP NEEDS THIS-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
+<!--   REQUIRED FOR THE MODAL TO SHOW UP-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
+<!-- BOOTSTRAP'S VERSION OF JS-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+<!--  GOOGLE API INFORMATION  -->
+    <script type="text/javascript" src="/js/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.2/superagent.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script async defer src="https://apis.google.com/js/api.js" 
+        onload="this.onload=function(){};handleClientLoad()" 
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>
 
 </body>
 
