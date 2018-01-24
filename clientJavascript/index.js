@@ -1,4 +1,13 @@
+const req  = require('superagent');
 console.log('Linked')      
+
+
+
+$(document).ready(() => {
+  handleClientLoad()
+  console.log('something happened pleasessdssss')
+
+
 // console.log(gapi, ' is this global')
 let isAuthorized = false;
 
@@ -87,19 +96,29 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
 	console.log(booksFromGoogle, ' what is this?')
 	
 
-		$.ajax({
-  			url: '/user/bookshelf',
-  			type: 'Post',
-  			data: booksFromGoogle,
-  			dataType: 'json',
-  			processData: false,
-  			success: (data) => {
-  				console.log(data)
-  			},
-  			error: (err) => {
-  				console.log(err)
-  			}
-  		}) 
+
+  req.post('/user/bookshelf')
+    .send(booksFromGoogle)
+    .set('Accept', 'application/json')
+    .then((data) => {
+      console.log(data)
+    })
+
+
+
+		// $.ajax({
+  // 			url: '/user/bookshelf',
+  // 			type: 'Post',
+  // 			data: booksFromGoogle,
+  // 			dataType: 'json',
+  // 			processData: false,
+  // 			success: (data) => {
+  // 				console.log(data)
+  // 			},
+  // 			error: (err) => {
+  // 				console.log(err)
+  // 			}
+  // 		}) 
 	   
 }
 
@@ -118,6 +137,7 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
   var GoogleAuth;
   var SCOPE = 'https://www.googleapis.com/auth/books';
   function handleClientLoad() {
+    console.log('being called')
     // Load the API's client and auth2 modules.
     // Call the initClient function after the modules load.
     gapi.load('client:auth2', initClient);
@@ -217,3 +237,5 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
   function updateSigninStatus(isSignedIn) {
     setSigninStatus();
   }
+
+})
