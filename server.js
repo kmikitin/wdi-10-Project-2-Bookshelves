@@ -11,6 +11,7 @@ require('./db/db.js')
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(methodOverride('_method'));
 app.use(session({
 	secret: 'Secret string',

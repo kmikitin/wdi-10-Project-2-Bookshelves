@@ -89,9 +89,9 @@ router.get('/logout', (req, res) => {
 // post route for google api info
 router.post('/bookshelf', (req, res) => {
 	console.log(req.session.username)
-	console.log(typeof req.body, typeof req.body.Data,req.body.Data)
-	const data = JSON.Parse(req.body.Data);
-	console.log(data.Favorites)
+	console.log(typeof req.body, typeof req.body,req.body)
+	// const data = JSON.parse(req.body);
+	console.log(req.body.Favorites)
 	// how can You identify who the user is? sesssssssss
 	// req.session ---something
 
