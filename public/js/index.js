@@ -1,30 +1,120 @@
 console.log('Linked')      
-
+// console.log(gapi, ' is this global')
 let isAuthorized = false;
 
   const sendAuthorizedApiRequest = (requestDetails) => {
-  currentApiRequest = requestDetails;
-  console.log('is this called')
+    // console.log('is this called')
   if (isAuthorized) {
     // Make API request
-    console.log('is this magically called when authorized')
+    // console.log('is this magically called when authorized')
     // gapi.client.request(requestDetails)
-    const request = gapi.client.request({
-      'method': 'GET',
-      'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves',
-      'params': {'part': 'snippet', 'mine': 'true'}
-    })
+    const request = gapi.client.request(requestDetails)
 
     console.log(request, ' this is request')
-    request.execute(function(response) {
-      console.log(response)
-    })
-    // Reset currentApiRequest variable.
-    currentApiRequest = {};
-  } else {
+    request.execute(function(res) {
+      console.log(res.items.length, ' this res.items.length')
+
+   // ajax call to our controller now to save the data in our db
+
+      let bookshelves = {}
+      let counter = 1
+      for(let i = 0 ; i < res.items.length; i++) {
+
+      	const requestObject = {
+	      'method': 'GET',
+	      'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves/' + res.items[i].id + '/volumes'
+	    }
+	    // this is populating our bookshelf object with the bookshelf title as the key
+
+	    bookshelves[res.items[i].title] = []
+
+	 
+
+
+			    const reqToVolumes = gapi.client.request(requestObject).then((response) => {
+			    	const books = populateDataToSend(response.result, res.items[i].title, bookshelves)
+			    	counter += 1;
+			    	console.log(counter, ' this is')
+			    	if(res.items.length - 1 === counter){
+			    		console.log('how was this called?', books)
+			    		makeApiCallToMyserver(books)
+			    	}
+			    	
+
+
+			    }, (err) => {
+			    	console.log(err)
+			    }) 
+  	  } // end of for loop
+	}) // end of request.execute
+ } else {
     GoogleAuth.signIn();
   }
+
 }
+
+
+
+function populateDataToSend(response, title, bookshelves){
+
+	let bookFromGoogle = {}
+	if(response.items){
+
+			for (let i = 0; i < response.items.length ; i++) {
+				bookFromGoogle = {
+					title: response.items[i].volumeInfo.title,
+					authors: response.items[i].volumeInfo.authors,
+					imageLinks: response.items[i].volumeInfo.imageLinks,
+					description: response.items[i].volumeInfo.description,
+					industryIdentifiers: response.items[i].volumeInfo.industryIdentifiers,
+					selfLink: response.items[i].selfLink
+				
+				}
+				bookshelves[title].push(bookFromGoogle)
+
+			}
+
+
+	}
+
+
+	return bookshelves;
+}
+
+
+
+const makeApiCallToMyserver = (booksFromGoogle) => {
+	console.log(booksFromGoogle, ' what is this?')
+	const objToSend = JSON.stringify(booksFromGoogle)
+	console.log(objToSend)
+		$.ajax({
+  			url: '/user/bookshelf',
+  			type: 'Post',
+  			data: "Data=" + objToSend,
+  			dataType: 'json',
+  			processData: false,
+  			success: (data) => {
+  				console.log(data)
+  			},
+  			error: (err) => {
+  				console.log(err)
+  			}
+  		}) 
+	   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
   var GoogleAuth;
   var SCOPE = 'https://www.googleapis.com/auth/books';
   function handleClientLoad() {
@@ -54,7 +144,7 @@ let isAuthorized = false;
 
       // Handle initial sign-in state. (Determine if user is already signed in.)
       var user = GoogleAuth.currentUser.get();
-      console.log(user, ' this is user, is my toke in here')
+      console.log(user, ' this is user, is my token in here')
       // if(user != null ){
       //         $.ajax({
       //   url:'https://www.googleapis.com/books/v1/mylibrary/bookshelves?key=' + user.Zi.access_token,
@@ -102,7 +192,16 @@ let isAuthorized = false;
     console.log(isAuthorized, ' this is isAuthorized')
     if (isAuthorized) {
       console.log('inside of if is called')
-      sendAuthorizedApiRequest(isAuthorized)
+
+      // Get my Library
+      // we need to have an object to send to the sendAUthorizedAPiRequest function
+      const request = {
+	      'method': 'GET',
+	      'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves',
+	      'params': {'part': 'snippet', 'mine': 'true'}
+	    }
+
+      sendAuthorizedApiRequest(request)
       $('#sign-in-or-out-button').html('Sign out');
       $('#revoke-access-button').css('display', 'inline-block');
       $('#auth-status').html('You are currently signed in and have granted ' +
