@@ -3,13 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 
 // MODEL
-const User = require('../models/users.js')
+const User = require('../models/users.js');
+const Book = require('../models/books.js')
 
 // get route to show all users
 // can see basic info like name and location
 // should display first few books in one of their shelves -- need to decide which shelf
 router.get('/', (req, res) => {
-	res.send('this is where all users will be displayed')
+	res.render('users/index.ejs')
 })
 
 
@@ -61,8 +62,8 @@ router.post('/login', (req, res) => {
 				req.session.username = req.body.username;
 				req.session.logged = true;
 				req.session.message = '';
-				console.log(req.body)
-				console.log(foundUser._id)
+				// console.log(req.body)
+				// console.log(foundUser._id)
 				res.redirect('/user/' + foundUser._id)
 			} else {
 				req.session.message = "Username or password incorrect";
@@ -75,11 +76,23 @@ router.post('/login', (req, res) => {
 	})
 })
 
+// logout user
+router.get('/logout', (req, res) => {
+	req.session.destory((err) => {
+		if (err) console.log(err)
+			res.redirect('/user/login')
+	})
+})
+
+// post route for google api info
 router.post('/bookshelf', (req, res) => {
+	console.log(req.session.username)
 	console.log(typeof req.body, typeof req.body.Data,req.body.Data)
 	const data = JSON.Parse(req.body.Data);
 	console.log(data.Favorites)
 	// how can You identify who the user is? sesssssssss
+	// req.session ---something
+
 	res.send('completed')
 })
 
@@ -89,25 +102,42 @@ router.post('/bookshelf', (req, res) => {
 router.get('/:id', (req, res) => {
 	User.findById(req.params.id, (err, foundUser) => {
 		if (err) console.log(err)
-			console.log(foundUser)
+			// console.log(foundUser)
 			res.render('users/profile.ejs', { user: foundUser })
 	})
 })
 
 // serve user form to edit their profile
 router.get('/:id/edit', (req, res) => {
-	res.send('get route for user edit')
+	User.findById(req.params.id, (err, foundUser) => {
+		if(err) console.log(err)
+			res.render('users/edit.ejs', { user: foundUser })
+	})
 })
 
 // update user information, send them to their profile when complete
 router.put('/:id', (req, res) => {
-	res.send('put route for user info update')
+	User.findByIdAndUpdate(req.params.id, req.body, (err, updatedUser) => {
+		if(err) console.log(err)
+			res.redirect('/user/' + updatedUser._id)
+	})
 })
 
 // delete the user and all their information
 // SHOULD NOT DELETE BOOKS because they exist seperate from the user
 router.delete('/:id', (req, res) => {
-	res.send('delete route for user')
+	User.findByIdAndRemove(req.params.id, (err, deletedUser) => {
+		console.log(deletedUser)
+		const bookIds = []
+		for(let i = 0; i < deletedUser.bookshelves.length; i++){
+			bookIds.push(deletedUser.bookshelves[i]._id);
+		}
+		Book.remove({_id: { $in: bookIds }}, (err, data) => {
+			if(err) console.log(err)
+				console.log(data)
+			res.redirect('/')
+		})
+	})
 })
 
 // EXPORT

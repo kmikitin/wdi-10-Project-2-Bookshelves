@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Book = require('./books.js')
+
 const userSchema = new mongoose.Schema({
 	firstName: String,
 	lastName: String,
@@ -8,7 +10,7 @@ const userSchema = new mongoose.Schema({
 	username: {type: String, unique: true},
 	password: String,
 	genres: [String],
-	bookshelves: {},
+	bookshelves: Book.schema,
 	bookclubs: {}
 
 })
