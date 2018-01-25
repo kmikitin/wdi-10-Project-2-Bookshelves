@@ -13,28 +13,49 @@
   <header>
       <h1>Welcome, <%=user.firstName %></h1>
       <form action="/user/login">
-        <button id="revoke-access-button">log out</button>
+        <button>log out</button>
       </form>
       <a href="/user/<%=user._id%>/edit"><button>Edit profile</button></a>
       <form action="/" >
         <button>delete account</button>
       </form>
+        <button id="google-connect">Synch Bookshelves with your Google account</button>
+        <button id="revoke-access-button">Revoke Google Access</button>
+        <div id="auth-status" style="display: inline; padding-left: 25px"></div>
       
   </header>
 
   <main>
-    <div id="bookshelves"></div>
+
+    <%=user.bookshelves %>
+
+<!--     <div id="bookshelves">
+   <% if (user.bookshelves) { %>
+     <% for (let i = 0; i < user.bookshelves.length; i++) { -%>
+       <%=user.bookshelves.name %>:
+        <% for (var j = 0; j < user.bookshelves.books.length; j++) { -%>
+          <%=user.bookshelves.books[j].title %>
+        <% } %> <!--end first for loop -->
+     <% } %> <!--end second for loop -->
+     
+   <% } else { %>
+      You don't have any shelves yet. <a href="">Click here to create one.</a>
+   <% } %> <!--end if statement -->
+    </div> -->
+
   </main>
 
 
   <footer>
 
   </footer>
-   <script src="https://apis.google.com/js/api.js">
-  // </script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-  <script type="text/javascript" src="/build.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.2/superagent.js"></script>
+
+<script src="https://apis.google.com/js/api.js" >
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/build.js"></script>
  
   
  

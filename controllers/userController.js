@@ -23,7 +23,8 @@ router.get('/register', (req, res) => {
 
 // create user in database take them to their profile page
 // encrypt password here
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
+	console.log('are we hitting this router, the register route')
 	const password = req.body.password;
 	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
@@ -35,19 +36,64 @@ router.post('/', (req, res) => {
 		username: req.body.username,
 		password: passwordHash,
 		genres: [],
-		bookshelves: {},
+		bookshelves: [],
 		bookclubs: {}
 	};
 
 	User.create(userDbEntry, (err, newUser) => {
+		console.log(err, ' this is err')
+		console.log('------------------------------------')
 		console.log(newUser, 'this is the new user')
-		console.log(req.session, 'in the post route')
+		console.log('------------------------------------')
+		// console.log(req.session, 'in the post route')
 		req.session.username = req.body.username;
 		req.session.logged = true;
+		res.redirect('/user/' + newUser._id)
 	})
-	res.redirect('/user/' + newUser._id)
+	
 })
 
+// post route for google api info
+router.post('/bookshelf', (req, res) => {
+	console.log(req.session)
+	console.log(req.session.username)
+	// console.log(req.body)
+	// console.log(Object.keys(req.body))
+	
+	let bookArray = []
+
+	for(let i = 0; i < Object.keys(req.body).length; i++) {
+		let pleaseBeBooks = req.body[Object.keys(req.body)[i]]
+		let shelfName = Object.keys(req.body)[i]
+		let bookObj = {
+			name: shelfName,
+			username: req.session.username,
+			books: pleaseBeBooks
+		}
+
+		// console.log(bookObj)
+		bookArray.push(bookObj)
+
+		// console.log(pleaseBeBooks)
+
+	}
+
+
+	User.findOne({ username: req.session.username }, (err, foundUser) => {
+		if (err) console.log (err)
+			console.log(foundUser)
+			Book.create(bookArray, (err, newBooks) => {
+				foundUser.bookshelves.push(newBooks);
+				foundUser.save()
+				res.redirect('/user/' + foundUser._id)
+			})
+	})
+
+	// const data = JSON.parse(req.body);
+	// console.log(req.body.Favorites)
+	
+	
+})
 
 // serve user form to login
 router.get('/login', (req, res) => {
@@ -86,22 +132,13 @@ router.get('/logout', (req, res) => {
 	})
 })
 
-// post route for google api info
-router.post('/bookshelf', (req, res) => {
-	console.log(req.session.username)
-	console.log(typeof req.body, typeof req.body,req.body)
-	// const data = JSON.parse(req.body);
-	console.log(req.body.Favorites)
-	// how can You identify who the user is? sesssssssss
-	// req.session ---something
 
-	res.send('completed')
-})
 
 // show the user their profile page
 // account for if they're logged in (will see edit/remove)
 // if not their page should show general info without edit/remove option
 router.get('/:id', (req, res) => {
+	console.log('hitting id route')
 	User.findById(req.params.id, (err, foundUser) => {
 		if (err) console.log(err)
 			// console.log(foundUser)

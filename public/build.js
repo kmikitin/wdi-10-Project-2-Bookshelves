@@ -3,38 +3,50 @@
 
 var req = require('superagent');
 console.log('Linked');
+var isAuthorized = false;
 
 $(document).ready(function () {
   handleClientLoad();
+
+  // $('#google-connect').on('click', ()=>{
+
+  //     handleClientLoad()
+  // })
+
+
+  // handleClientLoad()
   console.log('something happened pleasessdssss');
-
   // console.log(gapi, ' is this global')
-  var isAuthorized = false;
 
+  // this is false to force users to authorize through google
+
+
+  // this is the initial API request to get the bookshelf data
   var sendAuthorizedApiRequest = function sendAuthorizedApiRequest(requestDetails) {
     // console.log('is this called')
+
+    // if the user has authorized, make the call 
     if (isAuthorized) {
       // Make API request
-      // console.log('is this magically called when authorized')
       // gapi.client.request(requestDetails)
       var request = gapi.client.request(requestDetails);
 
-      console.log(request, ' this is request');
+      // console.log(request, ' this is request')
+      // .execute is a method provided by Google
       request.execute(function (res) {
-        console.log(res.items.length, ' this res.items.length');
+        // console.log(res.items.length, ' this res.items.length')
 
         // ajax call to our controller now to save the data in our db
-
         var bookshelves = {};
+        // counter is keeping track of the for loop, to make the API call on the last time thru
         var counter = 1;
+        // going through the bookshelves and grabbing the titles
 
         var _loop = function _loop(i) {
-
           var requestObject = {
             'method': 'GET',
             'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves/' + res.items[i].id + '/volumes'
             // this is populating our bookshelf object with the bookshelf title as the key
-
           };bookshelves[res.items[i].title] = [];
 
           var reqToVolumes = gapi.client.request(requestObject).then(function (response) {
@@ -57,7 +69,8 @@ $(document).ready(function () {
     } else {
       GoogleAuth.signIn();
     }
-  };
+  }; //end of sendAuthorizedApiRequest
+
 
   function populateDataToSend(response, title, bookshelves) {
 
@@ -82,9 +95,9 @@ $(document).ready(function () {
   }
 
   var makeApiCallToMyserver = function makeApiCallToMyserver(booksFromGoogle) {
-    console.log(booksFromGoogle, ' what is this?');
+    // console.log(booksFromGoogle, ' what is this?')
 
-    req.post('/user/bookshelf').send(booksFromGoogle).set('Accept', 'application/json').then(function (data) {
+    req.post('/user/bookshelf').send(booksFromGoogle).set('Accept', 'application/json').withCredentials().then(function (data) {
       console.log(data);
     });
 
@@ -125,9 +138,10 @@ $(document).ready(function () {
       'discoveryDocs': [discoveryUrl],
       'clientId': '690685317347-j08qcmtfihjgi9r2qr352sm4fpjd0d55.apps.googleusercontent.com',
       'scope': SCOPE
-    }).then(function () {
+    }).then(function (response) {
+      console.log('response', response);
       GoogleAuth = gapi.auth2.getAuthInstance();
-
+      console.log(GoogleAuth, ' this is GoogleAuth');
       // Listen for sign-in state changes.
       GoogleAuth.isSignedIn.listen(updateSigninStatus);
 
@@ -152,7 +166,7 @@ $(document).ready(function () {
 
       // Call handleAuthClick function when user clicks on
       //      "Sign In/Authorize" button.
-      $('#sign-in-or-out-button').click(function () {
+      $('#google-connect').click(function () {
         handleAuthClick();
       });
       $('#revoke-access-button').click(function () {
@@ -168,6 +182,7 @@ $(document).ready(function () {
     } else {
       // User is not signed in. Start Google auth flow.
       GoogleAuth.signIn();
+      return;
     }
   }
 
@@ -177,13 +192,13 @@ $(document).ready(function () {
 
   function setSigninStatus(isSignedIn) {
     var user = GoogleAuth.currentUser.get();
+    console.log('this is being called', user, 'setSigninStatus');
     isAuthorized = user.hasGrantedScopes(SCOPE);
     console.log(isAuthorized, ' this is isAuthorized');
     if (isAuthorized) {
       console.log('inside of if is called');
-
-      // Get my Library
-      // we need to have an object to send to the sendAUthorizedAPiRequest function
+      // Get the shelves from my Library
+      // we need to have an object to send to the sendAuthorizedAPiRequest function
       var request = {
         'method': 'GET',
         'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves',

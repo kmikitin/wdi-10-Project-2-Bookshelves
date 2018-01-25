@@ -1,46 +1,55 @@
 const req  = require('superagent');
 console.log('Linked')      
-
+let isAuthorized = false;
 
 
 $(document).ready(() => {
-  handleClientLoad()
+   handleClientLoad()
+
+  // $('#google-connect').on('click', ()=>{
+   
+  //     handleClientLoad()
+  // })
+
+  
+
+
+  // handleClientLoad()
   console.log('something happened pleasessdssss')
+  // console.log(gapi, ' is this global')
 
+  // this is false to force users to authorize through google
+ 
 
-// console.log(gapi, ' is this global')
-let isAuthorized = false;
-
+  // this is the initial API request to get the bookshelf data
   const sendAuthorizedApiRequest = (requestDetails) => {
     // console.log('is this called')
-  if (isAuthorized) {
-    // Make API request
-    // console.log('is this magically called when authorized')
-    // gapi.client.request(requestDetails)
-    const request = gapi.client.request(requestDetails)
 
-    console.log(request, ' this is request')
-    request.execute(function(res) {
-      console.log(res.items.length, ' this res.items.length')
+  // if the user has authorized, make the call 
+    if (isAuthorized) {
+      // Make API request
+      // gapi.client.request(requestDetails)
+      const request = gapi.client.request(requestDetails)
 
-   // ajax call to our controller now to save the data in our db
+      // console.log(request, ' this is request')
+      // .execute is a method provided by Google
+      request.execute(function(res) {
+        // console.log(res.items.length, ' this res.items.length')
 
-      let bookshelves = {}
-      let counter = 1
-      for(let i = 0 ; i < res.items.length; i++) {
+        // ajax call to our controller now to save the data in our db
+        let bookshelves = {}
+        // counter is keeping track of the for loop, to make the API call on the last time thru
+        let counter = 1
+        // going through the bookshelves and grabbing the titles
+        for(let i = 0 ; i < res.items.length; i++) {
+      	 const requestObject = {
+	       'method': 'GET',
+	       'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves/' + res.items[i].id + '/volumes'
+	       }
+	       // this is populating our bookshelf object with the bookshelf title as the key
+	       bookshelves[res.items[i].title] = []
 
-      	const requestObject = {
-	      'method': 'GET',
-	      'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves/' + res.items[i].id + '/volumes'
-	    }
-	    // this is populating our bookshelf object with the bookshelf title as the key
-
-	    bookshelves[res.items[i].title] = []
-
-	 
-
-
-			    const reqToVolumes = gapi.client.request(requestObject).then((response) => {
+			   const reqToVolumes = gapi.client.request(requestObject).then((response) => {
 			    	const books = populateDataToSend(response.result, res.items[i].title, bookshelves)
 			    	counter += 1;
 			    	console.log(counter, ' this is')
@@ -48,8 +57,6 @@ let isAuthorized = false;
 			    		console.log('how was this called?', books)
 			    		makeApiCallToMyserver(books)
 			    	}
-			    	
-
 
 			    }, (err) => {
 			    	console.log(err)
@@ -60,7 +67,7 @@ let isAuthorized = false;
     GoogleAuth.signIn();
   }
 
-}
+}//end of sendAuthorizedApiRequest
 
 
 
@@ -86,20 +93,18 @@ function populateDataToSend(response, title, bookshelves){
 
 	}
 
-
 	return bookshelves;
 }
 
 
 
 const makeApiCallToMyserver = (booksFromGoogle) => {
-	console.log(booksFromGoogle, ' what is this?')
-	
-
+	// console.log(booksFromGoogle, ' what is this?')
 
   req.post('/user/bookshelf')
     .send(booksFromGoogle)
     .set('Accept', 'application/json')
+    .withCredentials()
     .then((data) => {
       console.log(data)
     })
@@ -156,9 +161,10 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
         'discoveryDocs': [discoveryUrl],
         'clientId': '690685317347-j08qcmtfihjgi9r2qr352sm4fpjd0d55.apps.googleusercontent.com',
         'scope': SCOPE
-    }).then(function () {
+    }).then(function (response) {
+      console.log('response', response)
       GoogleAuth = gapi.auth2.getAuthInstance();
-
+      console.log(GoogleAuth, ' this is GoogleAuth')
       // Listen for sign-in state changes.
       GoogleAuth.isSignedIn.listen(updateSigninStatus);
 
@@ -183,7 +189,7 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
 
       // Call handleAuthClick function when user clicks on
       //      "Sign In/Authorize" button.
-      $('#sign-in-or-out-button').click(function() {
+      $('#google-connect').click(function() {
         handleAuthClick();
       }); 
       $('#revoke-access-button').click(function() {
@@ -199,6 +205,7 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
     } else {
       // User is not signed in. Start Google auth flow.
       GoogleAuth.signIn();
+      return 
     }
   }
 
@@ -208,13 +215,13 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
 
   function setSigninStatus(isSignedIn) {
     var user = GoogleAuth.currentUser.get();
+    console.log('this is being called', user, 'setSigninStatus')
     isAuthorized = user.hasGrantedScopes(SCOPE);
     console.log(isAuthorized, ' this is isAuthorized')
     if (isAuthorized) {
       console.log('inside of if is called')
-
-      // Get my Library
-      // we need to have an object to send to the sendAUthorizedAPiRequest function
+      // Get the shelves from my Library
+      // we need to have an object to send to the sendAuthorizedAPiRequest function
       const request = {
 	      'method': 'GET',
 	      'path': 'https://www.googleapis.com/books/v1/mylibrary/bookshelves',
@@ -231,6 +238,7 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
       $('#revoke-access-button').css('display', 'none');
       $('#auth-status').html('You have not authorized this app or you are ' +
           'signed out.');
+
     }
   }
 
