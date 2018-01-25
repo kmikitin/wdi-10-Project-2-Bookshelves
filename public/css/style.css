@@ -1,5 +1,5 @@
-html {
-    background-image: url("/img/search-bg-sm.jpg"); 
+#cus-shelf {
+    background-image: url("/img/k-bs-sm.JPG"); 
     background-size: cover;
     margin: 0 auto;
     
@@ -39,8 +39,37 @@ body {
    overflow-y: scroll;
 }
 
-.btn-outline-primary {
-    background-color: #996633
+.btn-success {
+    background-color: #996633;
+    border-color: whitesmoke;
+}
+
+.btn-success:hover {
+	background-color: #ce7a27;
+    border-color: whitesmoke;
+}
+
+.btn-success:active {
+	background-color: #ce7a27;
+    border-color: whitesmoke;
+    
+}
+.btn-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(195, 125, 40, 0.5);
+    background-color: #996633;
+    border-color: whitesmoke;
+}
+
+.btn-success:not(:disabled):not(.disabled).active:focus, .btn-success:not(:disabled):not(.disabled):active:focus, .show>.btn-success.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(195, 125, 40, 0.5);
+    background-color: #996633;
+    border-color: whitesmoke;
+}
+
+.form-control:focus {
+    border-color: #ce7a27;
+    box-shadow: 0 0 0 0.2rem rgba(195, 125, 40, 0.25);
+        
 }
 
 #Modal {
