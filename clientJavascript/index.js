@@ -106,17 +106,31 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
     .set('Accept', 'application/json')
     .withCredentials()
     .then((data) => {
-      console.log(JSON.parse(data.text))
+      // console.log(JSON.parse(data.text))
       const data = JSON.parse(data.text)
-
-      populateData(data)
+      console.log('is then happening?')
+      populateUserData(data)
         // you can do whatever jquery u want
 
     })
 
 
 // write a function to do that appending for you here that you will data to 
-
+  populateUserData = (data) => {
+    console.log('is this function being called')
+    const body = document.body
+    for (let i = 0; i < data.bookshelves.length; i++) {
+      console.log(data.bookshelves[i].name)
+      // let $bookshelf = $('<div class="bookshelf"></div>').text(data.bookshelves[i].name)
+        for(let j = 0; j < data.bookshelves[i].books.length; j++) {
+          console.log(data.bookshelves.books[j].books)
+          // let $bookOnShelf = $('<img class="book-img">').attr('src', data.bookshelves.books[j].imageLinks.smallThumbnail)
+          // $bookOnShelf.appendTo($bookshelf)
+          
+        }
+      // $bookshelf.appendTo($('body'))
+    }
+  }
 
 
 		// $.ajax({

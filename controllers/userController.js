@@ -128,7 +128,7 @@ router.post('/login', (req, res) => {
 router.get('/logout', (req, res) => {
 	req.session.destory((err) => {
 		if (err) console.log(err)
-			res.redirect('/user/login')
+			res.redirect('/')
 	})
 })
 
