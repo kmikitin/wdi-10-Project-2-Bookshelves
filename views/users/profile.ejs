@@ -12,15 +12,14 @@
 
   <header>
       <h1>Welcome, <%=user.firstName %></h1>
-      <form action="/user/login">
+      <form action="/user/logout">
         <button>log out</button>
       </form>
       <a href="/user/<%=user._id%>/edit"><button>Edit profile</button></a>
       <form action="/" >
         <button>delete account</button>
       </form>
-        <button id="google-connect">Synch Bookshelves with your Google account</button>
-        <button id="revoke-access-button">Revoke Google Access</button>
+        <button id="google-connect">Synch your account with Google</button>
         <div id="auth-status" style="display: inline; padding-left: 25px"></div>
       
   </header>

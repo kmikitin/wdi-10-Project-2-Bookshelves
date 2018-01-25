@@ -7,13 +7,7 @@ var isAuthorized = false;
 
 $(document).ready(function () {
 
-  // handleClientLoad()
-  console.log('something happened pleasessdssss');
-  // console.log(gapi, ' is this global')
-
   // this is false to force users to authorize through google
-
-
   // this is the initial API request to get the bookshelf data
   var sendAuthorizedApiRequest = function sendAuthorizedApiRequest(requestDetails) {
     // console.log('is this called')
@@ -42,6 +36,7 @@ $(document).ready(function () {
             // this is populating our bookshelf object with the bookshelf title as the key
           };bookshelves[res.items[i].title] = [];
 
+          // this is ANOTHER api call, this one is getting the volumes on the shelves
           var reqToVolumes = gapi.client.request(requestObject).then(function (response) {
             var books = populateDataToSend(response.result, res.items[i].title, bookshelves);
             counter += 1;
@@ -98,20 +93,6 @@ $(document).ready(function () {
       populateDataFromDb(dataFromDb);
       // you can do whatever jquery u want
     });
-
-    // $.ajax({
-    // 			url: '/user/bookshelf',
-    // 			type: 'Post',
-    // 			data: booksFromGoogle,
-    // 			dataType: 'json',
-    // 			processData: false,
-    // 			success: (data) => {
-    // 				console.log(data)
-    // 			},
-    // 			error: (err) => {
-    // 				console.log(err)
-    // 			}
-    // 		}) 
   };
 
   var makeApiCallToMyDb = function makeApiCallToMyDb() {
@@ -150,6 +131,7 @@ $(document).ready(function () {
 
   var GoogleAuth;
   var SCOPE = 'https://www.googleapis.com/auth/books';
+
   function handleClientLoad() {
     console.log('being called');
     // Load the API's client and auth2 modules.
@@ -180,19 +162,6 @@ $(document).ready(function () {
       // Handle initial sign-in state. (Determine if user is already signed in.)
       var user = GoogleAuth.currentUser.get();
       console.log(user, ' this is user, is my token in here');
-      // if(user != null ){
-      //         $.ajax({
-      //   url:'https://www.googleapis.com/books/v1/mylibrary/bookshelves?key=' + user.Zi.access_token,
-      //   type: 'GET',
-      //   dataType: 'JSON',
-      //   success: (data) => {
-      //     console.log(data, ' this is data')
-      //   }, 
-      //   error: (err) => {
-      //     console.log(err)
-      //   }
-      // })
-      // }
 
       setSigninStatus();
 
@@ -238,6 +207,7 @@ $(document).ready(function () {
       };
 
       sendAuthorizedApiRequest(request);
+      $('#google-connect').html('Disonnect from Google');
       $('#sign-in-or-out-button').html('Sign out');
       $('#revoke-access-button').css('display', 'inline-block');
       $('#auth-status').html('You are currently signed in and have granted ' + 'access to this app.');
