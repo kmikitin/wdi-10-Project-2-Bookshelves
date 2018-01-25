@@ -98,7 +98,7 @@ $(document).ready(function () {
     // console.log(booksFromGoogle, ' what is this?')
 
     req.post('/user/bookshelf').send(booksFromGoogle).set('Accept', 'application/json').withCredentials().then(function (data) {
-      console.log(data);
+      console.log(JSON.parse(data.text));
     });
 
     // $.ajax({

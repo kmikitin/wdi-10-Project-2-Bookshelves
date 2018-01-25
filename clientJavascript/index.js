@@ -106,8 +106,18 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
     .set('Accept', 'application/json')
     .withCredentials()
     .then((data) => {
-      console.log(data)
+      console.log(JSON.parse(data.text))
+      const data = JSON.parse(data.text)
+
+      populateData(data)
+        // you can do whatever jquery u want
+
     })
+
+
+// write a function to do that appending for you here that you will data to 
+
+
 
 		// $.ajax({
   // 			url: '/user/bookshelf',

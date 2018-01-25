@@ -55,15 +55,15 @@ router.post('/register', (req, res) => {
 
 // post route for google api info
 router.post('/bookshelf', (req, res) => {
-	console.log(req.session)
-	console.log(req.session.username)
+	// console.log(req.session)
+	// console.log(req.session.username)
 	// console.log(req.body)
 	// console.log(Object.keys(req.body))
 	User.findOne({ username: req.session.username }, (err, foundUser) => {
 		if (err) console.log (err)
-			console.log(foundUser)
+			// console.log(foundUser)
 		/// THis code you're not creating a book here you already have the books
-		let bookArray = []
+		
 
 		for(let i = 0; i < Object.keys(req.body).length; i++) {
 			let pleaseBeBooks = req.body[Object.keys(req.body)[i]]
@@ -73,14 +73,21 @@ router.post('/bookshelf', (req, res) => {
 				username: req.session.username,
 				books: pleaseBeBooks
 			}
-			console.log(bookObj.books)
+			// console.log(bookObj.books)
 			// console.log(pleaseBeBooks)
-			bookArray.push(bookObj)
+			
+			foundUser.bookshelves.push(bookObj)
+
 		}
-		foundUser.bookshelves.push(bookArray);
+		
+	
+		// foundUser.bookshelves.push(bookArray);
 		foundUser.save((err, updatedUser)=> {
+			console.log('--------------------------------------')
 			console.log(err, ' this is er')
+			console.log('--------------------------------------')
 			console.log(updatedUser, 'this is in the save in /bookshelves')
+			console.log('--------------------------------------')
 			res.send(updatedUser)
 		})
 		
@@ -91,10 +98,6 @@ router.post('/bookshelf', (req, res) => {
 	// console.log(req.body.Favorites)
 })
 
-// serve user form to login
-router.get('/login', (req, res) => {
-	res.render('users/login.ejs', { message: req.session.message })
-})
 
 // check user information in database, if successful send to profile page
 // if unsuccessful send invalid message to try again
@@ -107,6 +110,7 @@ router.post('/login', (req, res) => {
 				req.session.logged = true;
 				req.session.message = '';
 				// console.log(req.body)
+				console.log('hitting foudnuser in login should redirect ot user/id')
 				// console.log(foundUser._id)
 				res.redirect('/user/' + foundUser._id)
 			} else {
@@ -137,7 +141,7 @@ router.get('/:id', (req, res) => {
 	console.log('hitting id route')
 	User.findById(req.params.id, (err, foundUser) => {
 		if (err) console.log(err)
-			console.log(foundUser)
+			// console.log(foundUser)
 			res.render('users/profile.ejs', { user: foundUser })
 	})
 })

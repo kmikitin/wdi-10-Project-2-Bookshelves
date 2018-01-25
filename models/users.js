@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
 	username: {type: String, unique: true},
 	password: String,
 	genres: [String],
-	bookshelves: [Book.schema],
+	bookshelves: [Book],
 	bookclubs: []
 
 })
