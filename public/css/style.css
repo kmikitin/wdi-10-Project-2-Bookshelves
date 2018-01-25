@@ -1,3 +1,22 @@
+html {
+    background-image: url("/img/search-bg-sm.jpg"); 
+    background-size: cover;
+    margin: 0 auto;
+    
+}
+
+body {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    margin: 0 auto;
+    color: whitesmoke;
+}
+
+.spacer {
+    height: 100px;
+    width: 10px;
+}
+
 #sidebar {
     overflow-y: scroll;
     max-height: 91.6vh;
@@ -13,6 +32,14 @@
     max-height: 45.1vh;
 /*    min-height: 40vh;*/
    overflow-y: scroll;
+}
+
+.btn-outline-primary {
+    background-color: #996633
+}
+
+#Modal {
+    color: black;
 }
 
 /*
