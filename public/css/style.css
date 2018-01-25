@@ -1,3 +1,11 @@
+
+#nolog-shelf {
+    background-image: url("/img/search-bg-sm.jpg"); 
+    background-size: cover;
+    margin: 0 auto;
+    
+}
+
 #cus-shelf {
     background-image: url("/img/k-bs-sm.JPG"); 
     background-size: cover;
@@ -19,7 +27,11 @@ body {
 
 .spacer-register {
     height: 30px;
-    width: 10px;
+  
+}
+
+.spacer-right {
+    width: 60px;
 }
 
 #sidebar {
