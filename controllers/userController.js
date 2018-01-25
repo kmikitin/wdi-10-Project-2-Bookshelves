@@ -59,40 +59,36 @@ router.post('/bookshelf', (req, res) => {
 	console.log(req.session.username)
 	// console.log(req.body)
 	// console.log(Object.keys(req.body))
-	
-	let bookArray = []
-
-	for(let i = 0; i < Object.keys(req.body).length; i++) {
-		let pleaseBeBooks = req.body[Object.keys(req.body)[i]]
-		let shelfName = Object.keys(req.body)[i]
-		let bookObj = {
-			name: shelfName,
-			username: req.session.username,
-			books: pleaseBeBooks
-		}
-
-		// console.log(bookObj)
-		bookArray.push(bookObj)
-
-		// console.log(pleaseBeBooks)
-
-	}
-
-
 	User.findOne({ username: req.session.username }, (err, foundUser) => {
 		if (err) console.log (err)
 			console.log(foundUser)
-			Book.create(bookArray, (err, newBooks) => {
-				foundUser.bookshelves.push(newBooks);
-				foundUser.save()
-				res.redirect('/user/' + foundUser._id)
-			})
+		/// THis code you're not creating a book here you already have the books
+		let bookArray = []
+
+		for(let i = 0; i < Object.keys(req.body).length; i++) {
+			let pleaseBeBooks = req.body[Object.keys(req.body)[i]]
+			let shelfName = Object.keys(req.body)[i]
+			let bookObj = {
+				name: shelfName,
+				username: req.session.username,
+				books: pleaseBeBooks
+			}
+			console.log(bookObj.books)
+			// console.log(pleaseBeBooks)
+			bookArray.push(bookObj)
+		}
+		foundUser.bookshelves.push(bookArray);
+		foundUser.save((err, updatedUser)=> {
+			console.log(err, ' this is er')
+			console.log(updatedUser, 'this is in the save in /bookshelves')
+			res.send(updatedUser)
+		})
+		
 	})
+	// res.redirect('/user/' + foundUser._id)
 
 	// const data = JSON.parse(req.body);
 	// console.log(req.body.Favorites)
-	
-	
 })
 
 // serve user form to login
@@ -141,7 +137,7 @@ router.get('/:id', (req, res) => {
 	console.log('hitting id route')
 	User.findById(req.params.id, (err, foundUser) => {
 		if (err) console.log(err)
-			// console.log(foundUser)
+			console.log(foundUser)
 			res.render('users/profile.ejs', { user: foundUser })
 	})
 })

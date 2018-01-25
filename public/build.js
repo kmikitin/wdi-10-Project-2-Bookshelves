@@ -52,7 +52,7 @@ $(document).ready(function () {
           var reqToVolumes = gapi.client.request(requestObject).then(function (response) {
             var books = populateDataToSend(response.result, res.items[i].title, bookshelves);
             counter += 1;
-            console.log(counter, ' this is');
+            // console.log(counter, ' this is')
             if (res.items.length - 1 === counter) {
               console.log('how was this called?', books);
               makeApiCallToMyserver(books);

@@ -52,7 +52,7 @@ $(document).ready(() => {
 			   const reqToVolumes = gapi.client.request(requestObject).then((response) => {
 			    	const books = populateDataToSend(response.result, res.items[i].title, bookshelves)
 			    	counter += 1;
-			    	console.log(counter, ' this is')
+			    	// console.log(counter, ' this is')
 			    	if(res.items.length - 1 === counter){
 			    		console.log('how was this called?', books)
 			    		makeApiCallToMyserver(books)
@@ -109,8 +109,6 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
       console.log(data)
     })
 
-
-
 		// $.ajax({
   // 			url: '/user/bookshelf',
   // 			type: 'Post',
@@ -126,16 +124,6 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
   // 		}) 
 	   
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
