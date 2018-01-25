@@ -4,15 +4,7 @@ let isAuthorized = false;
 
 
 $(document).ready(() => {
-   handleClientLoad()
-
-  // $('#google-connect').on('click', ()=>{
-   
-  //     handleClientLoad()
-  // })
-
   
-
 
   // handleClientLoad()
   console.log('something happened pleasessdssss')
@@ -35,7 +27,7 @@ $(document).ready(() => {
       // .execute is a method provided by Google
       request.execute(function(res) {
         // console.log(res.items.length, ' this res.items.length')
-
+        console.log(res, ' this is res')
         // ajax call to our controller now to save the data in our db
         let bookshelves = {}
         // counter is keeping track of the for loop, to make the API call on the last time thru
@@ -68,6 +60,10 @@ $(document).ready(() => {
   }
 
 }//end of sendAuthorizedApiRequest
+
+
+
+
 
 
 
@@ -104,34 +100,15 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
   req.post('/user/bookshelf')
     .send(booksFromGoogle)
     .set('Accept', 'application/json')
-    .withCredentials()
+    .withCredentials() //this sends the cookie
     .then((data) => {
       // console.log(JSON.parse(data.text))
-      const data = JSON.parse(data.text)
-      console.log('is then happening?')
-      populateUserData(data)
+      const dataFromDb = JSON.parse(data.text)
+      console.log('is this api res happening?')
+      populateDataFromDb(dataFromDb)
         // you can do whatever jquery u want
 
     })
-
-
-// write a function to do that appending for you here that you will data to 
-  populateUserData = (data) => {
-    console.log('is this function being called')
-    const body = document.body
-    for (let i = 0; i < data.bookshelves.length; i++) {
-      console.log(data.bookshelves[i].name)
-      // let $bookshelf = $('<div class="bookshelf"></div>').text(data.bookshelves[i].name)
-        for(let j = 0; j < data.bookshelves[i].books.length; j++) {
-          console.log(data.bookshelves.books[j].books)
-          // let $bookOnShelf = $('<img class="book-img">').attr('src', data.bookshelves.books[j].imageLinks.smallThumbnail)
-          // $bookOnShelf.appendTo($bookshelf)
-          
-        }
-      // $bookshelf.appendTo($('body'))
-    }
-  }
-
 
 		// $.ajax({
   // 			url: '/user/bookshelf',
@@ -149,6 +126,45 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
 	   
 }
 
+const makeApiCallToMyDb = () => {
+  req.get('/user/bookshelf')
+    .withCredentials() //this sends the cookie
+    .then((data) => {
+      console.log(data, ' this is data')
+      const dataFromDb = JSON.parse(data.text)
+      populateDataFromDb(dataFromDb)
+    })
+
+}
+
+// write a function to do that appending for you here that you will send data to 
+  const populateDataFromDb = (dataFromDb) => {
+    $('.main').empty()
+    console.log(dataFromDb.bookshelves, ' what is the length')
+    console.log('is this pop data from db function being called')
+    for (let i = 0; i < dataFromDb.bookshelves.length; i++) {
+      const shelf = dataFromDb.bookshelves[i]
+      console.log(shelf.name, " <-------- bookshelf name")
+      const $bookshelf = $('<div class="bookshelf"></div>')
+      $bookshelf.append('<h1>' + shelf.name + '</h1>')
+      populateBookshelfWithBooks($bookshelf, shelf);
+     
+    }
+  }
+
+
+  const populateBookshelfWithBooks = (bookshelf, shelf) => {
+
+      for(let j = 0; j < shelf.books.length; j++) {
+        // console.log(shelf.books[j].title)
+        const $bookOnShelf = $('<img class="book-img">').attr('src', shelf.books[j].imageLinks.smallThumbnail)
+
+         $bookOnShelf.appendTo(bookshelf)
+        
+      }
+     bookshelf.appendTo($('.main'))
+
+  }
 
 
   var GoogleAuth;
@@ -257,5 +273,9 @@ const makeApiCallToMyserver = (booksFromGoogle) => {
   function updateSigninStatus(isSignedIn) {
     setSigninStatus();
   }
+
+
+   handleClientLoad()
+   makeApiCallToMyDb()
 
 })

@@ -6,13 +6,6 @@ console.log('Linked');
 var isAuthorized = false;
 
 $(document).ready(function () {
-  handleClientLoad();
-
-  // $('#google-connect').on('click', ()=>{
-
-  //     handleClientLoad()
-  // })
-
 
   // handleClientLoad()
   console.log('something happened pleasessdssss');
@@ -35,7 +28,7 @@ $(document).ready(function () {
       // .execute is a method provided by Google
       request.execute(function (res) {
         // console.log(res.items.length, ' this res.items.length')
-
+        console.log(res, ' this is res');
         // ajax call to our controller now to save the data in our db
         var bookshelves = {};
         // counter is keeping track of the for loop, to make the API call on the last time thru
@@ -97,8 +90,13 @@ $(document).ready(function () {
   var makeApiCallToMyserver = function makeApiCallToMyserver(booksFromGoogle) {
     // console.log(booksFromGoogle, ' what is this?')
 
-    req.post('/user/bookshelf').send(booksFromGoogle).set('Accept', 'application/json').withCredentials().then(function (data) {
-      console.log(JSON.parse(data.text));
+    req.post('/user/bookshelf').send(booksFromGoogle).set('Accept', 'application/json').withCredentials() //this sends the cookie
+    .then(function (data) {
+      // console.log(JSON.parse(data.text))
+      var dataFromDb = JSON.parse(data.text);
+      console.log('is this api res happening?');
+      populateDataFromDb(dataFromDb);
+      // you can do whatever jquery u want
     });
 
     // $.ajax({
@@ -114,6 +112,40 @@ $(document).ready(function () {
     // 				console.log(err)
     // 			}
     // 		}) 
+  };
+
+  var makeApiCallToMyDb = function makeApiCallToMyDb() {
+    req.get('/user/bookshelf').withCredentials() //this sends the cookie
+    .then(function (data) {
+      console.log(data, ' this is data');
+      var dataFromDb = JSON.parse(data.text);
+      populateDataFromDb(dataFromDb);
+    });
+  };
+
+  // write a function to do that appending for you here that you will send data to 
+  var populateDataFromDb = function populateDataFromDb(dataFromDb) {
+    $('.main').empty();
+    console.log(dataFromDb.bookshelves, ' what is the length');
+    console.log('is this pop data from db function being called');
+    for (var i = 0; i < dataFromDb.bookshelves.length; i++) {
+      var shelf = dataFromDb.bookshelves[i];
+      console.log(shelf.name, " <-------- bookshelf name");
+      var $bookshelf = $('<div class="bookshelf"></div>');
+      $bookshelf.append('<h1>' + shelf.name + '</h1>');
+      populateBookshelfWithBooks($bookshelf, shelf);
+    }
+  };
+
+  var populateBookshelfWithBooks = function populateBookshelfWithBooks(bookshelf, shelf) {
+
+    for (var j = 0; j < shelf.books.length; j++) {
+      // console.log(shelf.books[j].title)
+      var $bookOnShelf = $('<img class="book-img">').attr('src', shelf.books[j].imageLinks.smallThumbnail);
+
+      $bookOnShelf.appendTo(bookshelf);
+    }
+    bookshelf.appendTo($('.main'));
   };
 
   var GoogleAuth;
@@ -219,6 +251,9 @@ $(document).ready(function () {
   function updateSigninStatus(isSignedIn) {
     setSigninStatus();
   }
+
+  handleClientLoad();
+  makeApiCallToMyDb();
 });
 
 },{"superagent":4}],2:[function(require,module,exports){

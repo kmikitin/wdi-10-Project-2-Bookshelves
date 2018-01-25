@@ -64,38 +64,59 @@ router.post('/bookshelf', (req, res) => {
 			// console.log(foundUser)
 		/// THis code you're not creating a book here you already have the books
 		
+		if(foundUser.bookshelves.length === 0){
 
-		for(let i = 0; i < Object.keys(req.body).length; i++) {
-			let pleaseBeBooks = req.body[Object.keys(req.body)[i]]
-			let shelfName = Object.keys(req.body)[i]
-			let bookObj = {
-				name: shelfName,
-				username: req.session.username,
-				books: pleaseBeBooks
-			}
-			// console.log(bookObj.books)
-			// console.log(pleaseBeBooks)
-			
-			foundUser.bookshelves.push(bookObj)
+					for(let i = 0; i < Object.keys(req.body).length; i++) {
+						const pleaseBeBooks = req.body[Object.keys(req.body)[i]]
+						const shelfName = Object.keys(req.body)[i]
+						const bookObj = {
+							name: shelfName,
+							username: req.session.username,
+							books: pleaseBeBooks
+						}
+						// console.log(bookObj.books)
+						// console.log(pleaseBeBooks)
+						
+						foundUser.bookshelves.push(bookObj)
 
+					}
+					
+				
+					// foundUser.bookshelves.push(bookArray);
+					foundUser.save((err, updatedUser)=> {
+						console.log('--------------------------------------')
+						console.log(err, ' this is er')
+						console.log('--------------------------------------')
+						console.log(updatedUser, 'this is in the save in /bookshelves')
+						console.log('--------------------------------------')
+						res.send(updatedUser)
+					})
+
+		} else {
+			// write some code that find the matching, I think u can use $in
 		}
-		
-	
-		// foundUser.bookshelves.push(bookArray);
-		foundUser.save((err, updatedUser)=> {
-			console.log('--------------------------------------')
-			console.log(err, ' this is er')
-			console.log('--------------------------------------')
-			console.log(updatedUser, 'this is in the save in /bookshelves')
-			console.log('--------------------------------------')
-			res.send(updatedUser)
-		})
+
 		
 	})
 	// res.redirect('/user/' + foundUser._id)
 
 	// const data = JSON.parse(req.body);
 	// console.log(req.body.Favorites)
+})
+
+// this route gets the bookshelf data from the db and populates it on user profile page
+router.get('/bookshelf', (req, res) => {
+	User.findOne({ username: req.session.username }, (err, foundUser) => {
+		console.log('--------------------------------------')
+		
+
+	
+		res.send(foundUser)
+		
+
+		console.log('--------------------------------------')
+		// res.send(foundUser)
+	})
 })
 
 
