@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Find Books</title>
+    <title>Regiser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
@@ -12,10 +12,13 @@
 
 <body>
     <header>
+        <!-- SPACES THE TOP EDGE FROM CONTENT  -->
+        <div class="spacer-register"></div>
+
         <!-- HERE LIES THE TOP NAV-->
-        <div class="input-group mb-3 col-md-6 mx-auto mt-md-2 ">
-            <a class="navbar-brand"  href="/">BookShelves</a>
-               <div class="input-group-prepend">
+        <div class="input-group mb-3 col-md-6 mx-auto mb-md-5 ">
+            <a class="navbar-brand" href="/">BookShelves</a>
+            <div class="input-group-prepend">
                 <button class="btn btn-outline-primary " type="button">Search</button>
             </div>
             <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
@@ -25,7 +28,7 @@
     <main>
         <!-- HERE LIES THE LEFT SIDE TEXT-->
         <div class="container-fluid">
-            <div class="row" id="register">
+            <div class="row mx-auto" id="register">
                 <div class="col">
                     <h2 class="text-center">Sign up form</h2>
                     <hr>
@@ -58,25 +61,36 @@
                             </div>
                         </div>
 
-                     <div class="row mx-auto">
-                        <div class="  col-md-3 mx-auto mt-md-2">
-                            <button class="btn btn-outline-success">Sign Up!</button>
-                        </div>
-                        <!-- <div class="  col-md-3 mx-auto mt-md-2">
-                            <button id="sign-in-or-out-button" class="btn btn-outline-success" style="margin-left: 25px">Sign in using Google</button>
-                        </div>
-                        <div class="mb-3 col-md-3 mx-auto mt-md-2">
-                            <button id="revoke-access-button" class="btn btn-outline-danger" style="display: none; margin-left: 25px">Revoke access</button></div>
-                            <div class="row text-center mx-auto">
-                                 <div id="auth-status"  style="display: inline; padding-left: 25px"> -->
 
-                    </div>
 
 
 
                     </form>
-      
+                    <div class="row">
+                       <div class="col-4 mr-4"></div>
+                        <div class="col-4 mx-auto mt-md-2">
+
+                            <button class="btn btn-outline-success">Sign Up!</button>
+                        </div>
+                        <div class="col-2"></div>
+
+<!--OLG GOOGLE AUTH BUTTONS AND STATUS-->
+                        <!--
+                           <div class="  col-md-3 mx-auto mt-md-2">
+                            <button id="sign-in-or-out-button" class="btn btn-outline-success" style="margin-left: 25px">Sign in using Google</button>
+                        </div>
+-->
+                        <!--
+                        <div class="mb-3 col-md-3 mx-auto mt-md-2">
+                            <button id="revoke-access-button" class="btn btn-outline-danger" style="display: none; margin-left: 25px">Revoke access</button></div>
+-->
+                        <!--
+                            <div class="row text-center mx-auto">
+                                 <div id="auth-status"  style="display: inline; padding-left: 25px">
+
+                                 </div>
                             </div>
+-->
 
                     </div>
 
@@ -88,24 +102,27 @@
                 <div class="col-4">
                     <h2 class="text-center">Perks of signing up!</h2>
                     <hr>
-                <ul>
-                    <li>Perk 1</li>
-                    <li>Perk 2</li>
-                    <li>Perk 3</li>
-                    <li>Perk 4</li>
-                    <li>Perk 5</li>
-                    <li>Perk 6</li>
-                    <li>Perk 7</li>
-                    <li>Perk 8</li>
-                    <li>Perk 9</li>
-                    <li>Perk 10</li>
-                </ul><hr>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic consequatur placeat dolorum totam earum ab impedit, debitis veritatis velit, deleniti quas voluptatum dolorem optio sapiente. Necessitatibus suscipit culpa atque delectus.</div>
+                    <ul>
+                        <li>Perk 1</li>
+                        <li>Perk 2</li>
+                        <li>Perk 3</li>
+                        <li>Perk 4</li>
+                        <li>Perk 5</li>
+                        <li>Perk 6</li>
+                        <li>Perk 7</li>
+                        <li>Perk 8</li>
+                        <li>Perk 9</li>
+                        <li>Perk 10</li>
+                    </ul>
+                    <hr> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic consequatur placeat dolorum totam earum ab impedit, debitis veritatis velit, deleniti quas voluptatum dolorem optio sapiente. Necessitatibus suscipit culpa atque delectus.</div>
             </div>
         </div>
     </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
 
 
     </script>
