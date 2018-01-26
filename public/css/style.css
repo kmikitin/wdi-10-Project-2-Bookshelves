@@ -34,6 +34,11 @@ body {
     width: 60px;
 }
 
+.bookshelf {
+    overflow-x: scroll;
+    
+}
+
 #sidebar {
     overflow-y: scroll;
     max-height: 91.6vh;
@@ -51,6 +56,8 @@ body {
    overflow-y: scroll;
 }
 
+
+/*CHANGE BUTTON STYLES*/
 .btn-success {
     background-color: #996633;
     border-color: whitesmoke;
@@ -77,6 +84,8 @@ body {
     background-color: #996633;
     border-color: whitesmoke;
 }
+
+/*MODAL AND FORM COMTROL*/
 
 .form-control:focus {
     border-color: #ce7a27;

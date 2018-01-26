@@ -2,25 +2,70 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>_title_</title>
+  <title>User Profile</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
 
 </head>
 
 <body>
+
   <header>
-    _headerContent_
+      <h1>Welcome, <%=user.firstName %></h1>
+      <form action="/user/logout">
+        <button class="btn btn-success">log out</button>
+      </form>
+      <a href="/user/<%=user._id%>/edit"><button class="btn btn-success">Edit profile</button></a>
+      <form action="/" >
+        <button class="btn btn-success">delete account</button>
+      </form>
+        <button id="google-connect" class="btn btn-success">Synch with Google Books!</button>
+        <div id="auth-status" style="display: inline; padding-left: 25px"></div>
+      
   </header>
 
-  <main>
-    _mainContent_
-  </main>
+  <main class="main">
 
-  <footer>
-    _footerContent_
-  </footer>
+<div class="input-group mb-3 col-md-6 mx-auto mt-md-5 ">
+            <div class="input-group-prepend">
+                <button class="btn btn-success " type="button">Button</button>
+            </div>
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+        </div>
+<!--HERE LIES THE CONTENT OF THE SEARCH RESULTS-->
+        <div class="container-fluid col text-center mt-4">
+            Drumstick salami ribs pig corned cow tip tri-tip bregenwurst, sirloin steak 
+            pancetta, andouille ham hock sirloin. Tip filet short jerky fatback. Prosciutto 
+            rump t-bone tip kevin, ham landjaeger sopressata. Ham shankle ham sirloin, 
+            turducken corned pig brisket andouillette. Ground pig pastrami tip flank cow ham 
+            swine t-bone t-bone biltong ham round porchetta ham pork ribs cow ham pork doner 
+            tail shoulder, cow ribs biltong sopressata ham boudin landjaeger frankfurter, 
+            tip steak short t-bone venison, tip sirloin pig prosciutto. Ham pork spare ham 
+            pastrami tip tip pork kielbasa tri-tip ham ham ham sopressata, shoulder ribs 
+            short tip shank cow cow jowl andouillette pig beef tip pancetta, kielbasa ham 
+            chicken ham meatball pork boudin shoulder short. Pig ribs capicola, hock 
+            kielbasa ham ribs pork ham kevin bresaola pastrami, tip beef pig doner.
+            
+            <hr>
+            
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam totam quam perspiciatis ex sapiente necessitatibus, blanditiis placeat nobis eum et vero eaque, tenetur temporibus neque porro dolore incidunt iusto inventore.
+        </div>
 
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    </main>
+
+    <footer>
+        <div class="bottom mb-md-5 text-center">Footer</div>
+    </footer>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- this is where GoogleAuth happens, and API calls are made -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.2/superagent.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="/build.js"></script>
+ 
+  
+ 
 </body>
 </html>
