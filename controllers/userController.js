@@ -41,10 +41,6 @@ router.post('/register', (req, res) => {
 	};
 
 	User.create(userDbEntry, (err, newUser) => {
-		console.log(err, ' this is err')
-		console.log('------------------------------------')
-		console.log(newUser, 'this is the new user')
-		console.log('------------------------------------')
 		// console.log(req.session, 'in the post route')
 		req.session.username = req.body.username;
 		req.session.logged = true;
@@ -114,12 +110,10 @@ router.post('/login', (req, res) => {
 			} else {
 				req.session.message = "Username or password incorrect";
 				res.redirect('/');
-				document.getElementById('modal-content').css('display', 'flex')
 			}
 		} else {
 			req.session.message = "Username or password incorrect";
 			res.redirect('/');
-			document.getElementById('modal-content').css('display', 'flex')
 		}
 	})
 })
