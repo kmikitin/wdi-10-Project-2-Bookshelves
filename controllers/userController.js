@@ -62,60 +62,37 @@ router.post('/bookshelf', (req, res) => {
 	User.findOne({ username: req.session.username }, (err, foundUser) => {
 		if (err) console.log (err)
 			// console.log(foundUser)
-		/// THis code you're not creating a book here you already have the books
-		
-		if(foundUser.bookshelves.length === 0){
-
-					for(let i = 0; i < Object.keys(req.body).length; i++) {
-						const pleaseBeBooks = req.body[Object.keys(req.body)[i]]
-						const shelfName = Object.keys(req.body)[i]
-						const bookObj = {
-							name: shelfName,
-							username: req.session.username,
-							books: pleaseBeBooks
-						}
+			if(foundUser.bookshelves.length === 0){
+				for(let i = 0; i < Object.keys(req.body).length; i++) {
+					const pleaseBeBooks = req.body[Object.keys(req.body)[i]]
+					const shelfName = Object.keys(req.body)[i]
+					const bookObj = {
+						name: shelfName,
+						username: req.session.username,
+						books: pleaseBeBooks
+					}
 						// console.log(bookObj.books)
 						// console.log(pleaseBeBooks)
-						
 						foundUser.bookshelves.push(bookObj)
-
-					}
-					
-				
+				}	
 					// foundUser.bookshelves.push(bookArray);
 					foundUser.save((err, updatedUser)=> {
-						console.log('--------------------------------------')
-						console.log(err, ' this is er')
-						console.log('--------------------------------------')
-						console.log(updatedUser, 'this is in the save in /bookshelves')
-						console.log('--------------------------------------')
 						res.send(updatedUser)
 					})
 
 		} else {
 			// write some code that find the matching, I think u can use $in
 		}
-
 		
 	})
-	// res.redirect('/user/' + foundUser._id)
 
-	// const data = JSON.parse(req.body);
-	// console.log(req.body.Favorites)
 })
 
 // this route gets the bookshelf data from the db and populates it on user profile page
 router.get('/bookshelf', (req, res) => {
 	User.findOne({ username: req.session.username }, (err, foundUser) => {
-		console.log('--------------------------------------')
-		
-
-	
+		// this isn't sending to browser, it's sending response to ajax call in index.js
 		res.send(foundUser)
-		
-
-		console.log('--------------------------------------')
-		// res.send(foundUser)
 	})
 })
 
@@ -131,25 +108,25 @@ router.post('/login', (req, res) => {
 				req.session.logged = true;
 				req.session.message = '';
 				// console.log(req.body)
-				console.log('hitting foudnuser in login should redirect ot user/id')
+				// console.log('hitting foundUser in login should redirect ot user/id')
 				// console.log(foundUser._id)
 				res.redirect('/user/' + foundUser._id)
 			} else {
 				req.session.message = "Username or password incorrect";
-				res.redirect('/user/login');
+				res.redirect('/');
+				document.getElementById('modal-content').css('display', 'flex')
 			}
 		} else {
 			req.session.message = "Username or password incorrect";
-			res.redirect('/user/login');
+			res.redirect('/');
+			document.getElementById('modal-content').css('display', 'flex')
 		}
 	})
 })
 
 // logout user
 router.get('/logout', (req, res) => {
-	console.log('--------------------------------------')
-	console.log('hit logout route')
-	console.log('--------------------------------------')
+	// console.log('hit logout route')
 	req.session.destroy((err) => {
 		if (err) console.log(err)
 		res.redirect('/')
@@ -161,7 +138,7 @@ router.get('/logout', (req, res) => {
 
 // show the user their profile page
 // account for if they're logged in (will see edit/remove)
-// if not their page should show general info without edit/remove option
+// if not their page should show general info without edit/remove option -- this is if someone else looks them up
 router.get('/:id', (req, res) => {
 	console.log('hitting id route')
 	User.findById(req.params.id, (err, foundUser) => {

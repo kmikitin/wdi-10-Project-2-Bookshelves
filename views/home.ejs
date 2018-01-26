@@ -21,20 +21,21 @@
            <div class="col">
             
             <button type="button" class="btn btn-success float-right  " data-toggle="modal" data-target="#Modal">Login</button>
-</div>
+           </div>
             <!-- Modal -->
             <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
 
                         <form class="px-4 py-3" action="/user/login" method="POST">
+                            <p><%= message %></p>
                             <div class="form-group">
                                 <label for="DropdownFormUsername">Username</label>
-                                <input type="text" name="username" class="form-control" id="DropdownFormUsername" placeholder="Username">
+                                <input type="text" name="username" class="form-control" id="DropdownFormUsername" placeholder="Username" required>
                             </div>
                             <div class="form-group">
                                 <label for="DropdownFormPassword">Password</label>
-                                <input type="password" name="password" class="form-control" id="DropdownFormPassword" placeholder="Password">
+                                <input type="password" name="password" class="form-control" id="DropdownFormPassword" placeholder="Password" required>
                             </div>
 
                             <!-- THIS IS JSUT AN OPTION TO OPT IN TO HAVING A COOKIE (REMEMBER ME) -->
@@ -94,12 +95,12 @@
         <div class="container-fluid col d-inline-block text-center">
             <a href="/book">I just want to see what's here.</a>
         </div>
-
     </main>
 
     <footer>
-        <div class="bottom mb-md-5 text-center">Footer</div>
+        <div class="bottom mb-md-5 text-center"></div>
     </footer>
+
 <!--BOOTSTRAP NEEDS THIS-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
