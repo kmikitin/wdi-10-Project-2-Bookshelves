@@ -185,9 +185,9 @@ const makeApiCallToMyDb = () => {
     // Initialize the gapi.client object, which app uses to make API requests.
     // 'scope' field specifies space-delimited list of access scopes.
     gapi.client.init({
-        'apiKey': 'AIzaSyDSltVcQfPnkSYy93x53V6H1XCd4ZPje7c',
+        'apiKey': process.env.API_KEY,
         'discoveryDocs': [discoveryUrl],
-        'clientId': '690685317347-j08qcmtfihjgi9r2qr352sm4fpjd0d55.apps.googleusercontent.com',
+        'clientId': process.env.CLIENT_ID,
         'scope': SCOPE
     }).then(function (response) {
       // console.log('response', response)

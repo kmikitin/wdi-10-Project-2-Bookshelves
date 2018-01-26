@@ -43,4 +43,3 @@ There were a lot of things we wanted to do, but didn't get to:
 * Bookshelves will be discoverable outside of a user profile (if it's a public shelf), so eventually people who aren't signed up for the site would be able to 'browse the shelves' and decide if they want to join
 * Create an account button on the homepage
 * Allow users to create shelves, add and remove books from shelves (seperate from their Google account)
-

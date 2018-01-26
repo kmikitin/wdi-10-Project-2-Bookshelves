@@ -1,3 +1,5 @@
+const port = process.env.PORT
+
 // NODES
 const express = require('express');
 const app = express();
@@ -5,9 +7,12 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
 
+// DOTENV
+require('dotenv').config()
+
+
 // DATABASE
 require('./db/db.js')
-
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,6 +47,6 @@ app.get('*', (req,res) => {
 
 
 // LISTENER
-app.listen(3000, () => {
-	console.log('Server is litening on port 3000')
+app.listen(port, () => {
+	console.log('Server is litening on port:' + port)
 });
